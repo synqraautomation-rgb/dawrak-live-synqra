@@ -1,0 +1,140 @@
+{
+  "entities": {
+    "Clinic": {
+      "title": "Clinic",
+      "description": "Medical clinic profile, sensitive administrative data, and live queue state",
+      "type": "object",
+      "properties": {
+        "clinicName": { "type": "string", "maxLength": 120 },
+        "doctorName": { "type": "string", "maxLength": 100 },
+        "specialty": { "type": "string", "maxLength": 100 },
+        "logoUrl": { "type": "string", "maxLength": 500 },
+        "brandColor": { "type": "string", "maxLength": 30 },
+        "phoneNumber": { "type": "string", "maxLength": 30 },
+        "pinHash": { "type": "string", "maxLength": 128 },
+        "currentServingNumber": { "type": "number" },
+        "lastQueueNumber": { "type": "number" },
+        "totalBookedToday": { "type": "number" },
+        "avgConsultMinutes": { "type": "number" },
+        "subscriptionStatus": { "type": "string", "enum": ["trial", "active", "paused"] },
+        "subscriptionEndsAt": { "type": "string" },
+        "isPaused": { "type": "boolean" },
+        "pauseReason": { "type": "string", "maxLength": 200 },
+        "isDemo": { "type": "boolean" },
+        "isDemoHidden": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["clinicName", "specialty", "phoneNumber", "pinHash", "currentServingNumber", "subscriptionStatus", "isPaused", "isDemo"]
+    },
+    "PublicClinic": {
+      "title": "PublicClinic",
+      "description": "Sanitized public projection of clinic info for discovery, booking, and display without sensitive fields",
+      "type": "object",
+      "properties": {
+        "clinicName": { "type": "string", "maxLength": 120 },
+        "doctorName": { "type": "string", "maxLength": 100 },
+        "specialty": { "type": "string", "maxLength": 100 },
+        "logoUrl": { "type": "string", "maxLength": 500 },
+        "brandColor": { "type": "string", "maxLength": 30 },
+        "phoneNumber": { "type": "string", "maxLength": 30 },
+        "currentServingNumber": { "type": "number" },
+        "lastQueueNumber": { "type": "number" },
+        "avgConsultMinutes": { "type": "number" },
+        "isPaused": { "type": "boolean" },
+        "pauseReason": { "type": "string", "maxLength": 200 },
+        "isDemo": { "type": "boolean" },
+        "isDemoHidden": { "type": "boolean" },
+        "subscriptionStatus": { "type": "string", "enum": ["trial", "active", "paused"] },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["clinicName", "specialty", "phoneNumber", "currentServingNumber", "isPaused", "isDemo"]
+    },
+    "QueueEntry": {
+      "title": "QueueEntry",
+      "description": "Individual patient booking entry in a clinic private queue with patient PII",
+      "type": "object",
+      "properties": {
+        "patientName": { "type": "string", "maxLength": 100 },
+        "patientPhone": { "type": "string", "maxLength": 30 },
+        "visitReason": { "type": "string", "maxLength": 150 },
+        "queueNumber": { "type": "number" },
+        "status": { "type": "string", "enum": ["waiting", "called", "completed", "no_show"] },
+        "isPriority": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "calledAt": { "type": "string" },
+        "completedAt": { "type": "string" },
+        "onTheWay": { "type": "boolean" },
+        "estimatedArrivalMinutes": { "type": "number" },
+        "checkedInReception": { "type": "boolean" },
+        "smsNotifiedAt": { "type": "string" }
+      },
+      "required": ["patientName", "patientPhone", "visitReason", "queueNumber", "status", "isPriority", "createdAt"]
+    },
+    "PublicQueueEntry": {
+      "title": "PublicQueueEntry",
+      "description": "Anonymized public status of a ticket for live tracking and waiting-room display without PII",
+      "type": "object",
+      "properties": {
+        "queueNumber": { "type": "number" },
+        "status": { "type": "string", "enum": ["waiting", "called", "completed", "no_show"] },
+        "isPriority": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "calledAt": { "type": "string" },
+        "completedAt": { "type": "string" },
+        "onTheWay": { "type": "boolean" },
+        "estimatedArrivalMinutes": { "type": "number" },
+        "checkedInReception": { "type": "boolean" }
+      },
+      "required": ["queueNumber", "status", "isPriority", "createdAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Administrative actions executed on clinic resources",
+      "type": "object",
+      "properties": {
+        "action": { "type": "string", "maxLength": 100 },
+        "actor": { "type": "string", "maxLength": 100 },
+        "details": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["action", "actor", "details", "createdAt"]
+    },
+    "DailyStats": {
+      "title": "DailyStats",
+      "description": "Aggregated daily clinic serving metrics",
+      "type": "object",
+      "properties": {
+        "totalServed": { "type": "number" },
+        "avgWaitMinutes": { "type": "number" },
+        "peakHour": { "type": "number" }
+      },
+      "required": ["totalServed", "avgWaitMinutes"]
+    }
+  },
+  "firestore": {
+    "/clinics/{clinicId}": {
+      "schema": { "$ref": "#/entities/Clinic" },
+      "description": "Clinics collection containing private clinic profiles, PIN hashes, and subscription details"
+    },
+    "/clinics/{clinicId}/queue/{entryId}": {
+      "schema": { "$ref": "#/entities/QueueEntry" },
+      "description": "Private queue entries subcollection with patient PII"
+    },
+    "/clinics/{clinicId}/auditLog/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Audit logs subcollection for a clinic"
+    },
+    "/clinics/{clinicId}/dailyStats/{dateId}": {
+      "schema": { "$ref": "#/entities/DailyStats" },
+      "description": "Daily statistics subcollection for a clinic"
+    },
+    "/publicClinics/{clinicId}": {
+      "schema": { "$ref": "#/entities/PublicClinic" },
+      "description": "Sanitized public clinic documents for public directory, booking, and TV displays"
+    },
+    "/publicClinics/{clinicId}/queue/{entryId}": {
+      "schema": { "$ref": "#/entities/PublicQueueEntry" },
+      "description": "Public queue status subcollection without patient names or phones"
+    }
+  }
+}

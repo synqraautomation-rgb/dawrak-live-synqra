@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isMasterAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'saga.studio666@gmail.com' ||
+        request.auth.token.admin == true
+      );
+    }
+
+    // Connection validation test document
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+
+    // System configuration and master admin authentication
+    match /system/{docId} {
+      allow read, write: if true;
+    }
+
+    // Public projections (directory, TV display, patient tracking)
+    match /publicClinics/{clinicId} {
+      allow read, write: if true;
+      
+      match /queue/{entryId} {
+        allow read, write: if true;
+      }
+    }
+
+    // Primary Clinics Collection
+    match /clinics/{clinicId} {
+      // Clinic discovery, booking header, waiting-room TV display
+      allow get, list: if true;
+
+      // Creation, updates, deletions for clinics
+      allow create, update, delete: if true;
+
+      // Queue subcollection: patient booking, live tracking, TV display, staff actions
+      match /queue/{entryId} {
+        allow get, list: if true;
+        allow create, update, delete: if true;
+      }
+
+      // Audit logs subcollection
+      match /auditLog/{logId} {
+        allow read, write: if true;
+      }
+      match /audit_logs/{logId} {
+        allow read, write: if true;
+      }
+
+      // Daily stats subcollection
+      match /dailyStats/{dateId} {
+        allow read, write: if true;
+      }
+    }
+  }
+}

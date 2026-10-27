@@ -1,0 +1,6 @@
+{
+  "name": "Dawrak Live - Smart Medical Queue Management",
+  "description": "منظومة دورك لايف المتطورة لإدارة طوابير العيادات الطبية بالزمن الفعلي، مع استدعاء صوتي وشاشات انتظار تفاعلية ورموز حجز QR مخصصة.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

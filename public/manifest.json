@@ -1,0 +1,20 @@
+{
+  "name": "دورك لايف | Dawrak Live",
+  "short_name": "Dawrak Live",
+  "description": "نظام إدارة طوابير العيادات الطبية الذكي بالزمن الفعلي من سينقرا",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait-primary",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

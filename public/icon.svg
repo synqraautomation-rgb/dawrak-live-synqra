@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="synqraGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="50%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <filter id="neonBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="#0B132B" />
+  <!-- Outer Orbit -->
+  <circle cx="256" cy="256" r="160" stroke="url(#synqraGlow)" stroke-width="24" stroke-linecap="round" stroke-dasharray="700 240" filter="url(#neonBlur)" opacity="0.9" />
+  <!-- Inner Automation Turn Loop -->
+  <path d="M190 256 C190 200, 240 180, 280 220 S350 310, 310 330 C270 350, 230 320, 230 256" stroke="#38bdf8" stroke-width="20" stroke-linecap="round" />
+  <!-- Glowing Live Node -->
+  <circle cx="360" cy="180" r="28" fill="#10b981" filter="url(#neonBlur)" />
+  <circle cx="360" cy="180" r="14" fill="#ffffff" />
+  <!-- Core Number / Live Turn Indicator -->
+  <circle cx="256" cy="256" r="44" fill="#0F172A" stroke="url(#synqraGlow)" stroke-width="8" />
+  <circle cx="256" cy="256" r="12" fill="#38bdf8" />
+</svg>
